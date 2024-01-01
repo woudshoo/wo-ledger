@@ -1,0 +1,123 @@
+* Notes on how to use cl-ledger
+
+
+
+#+begin_src plantuml :file "cd.svg"
+class binder
+
+class "commodity-pool"
+binder --> "commodity-pool"
+"commodity-pool" "1" --> "*" commodity
+
+
+
+class account
+binder --> account
+account --> "account-data"
+account -> account : parent
+account -> account : children
+
+
+class journal
+binder "1" --> "*" journal
+journal -> account : default
+
+
+class "binder-data"
+binder --> "binder-data"
+
+
+
+
+
+class entry
+journal <-- entry
+
+
+class transaction
+entry "1" --> "*" transaction
+#+end_src
+
+#+RESULTS:
+[[file:cd.svg]]
+
+** Binder
+
+The thing that holds everything together.
+This can be created with
+
+#+begin_src lisp
+  (binder <pathname-to-dat-file>)
+#+end_src
+
+
+
+** Entry
+
+Properties:
+
+| Field          | Type          | Note                      | Example                   |
+|----------------+---------------+---------------------------+---------------------------|
+| actual-date    | fixed-time    |                           | 2023-05-01                |
+| effective-date | fixed-time    |                           |                           |
+| status         | item-status   | cleared/pending/..        | :cleared                  |
+| code           | string        | ???                       |                           |
+| payee          | string        | description               | Investment balance        |
+| note           | string        |                           |                           |
+| transactions   | * transaction | modifications to accounts | Assets:Brokerage +50 AAPL |
+| position       | item-position | Location in source        | line 16-20                |
+| normalizedp    | boolean       | ???                       |                           |
+| data           |               | ???                       |                           |
+|----------------+---------------+---------------------------+---------------------------|
+
+
+This is a block in a ledger.dat file like this:
+
+#+begin_example
+05/01 * Investment balance
+  Assets:Brokerage              50 AAPL @ $30.00
+  Equity:Opening Balances
+#+end_example
+
+
+
+** Transaction
+
+
+
+** Saving Data
+
+this could be done with the =(print-report...)= code to rewrite the file from in-memory.
+
+** Accounts and Envelopes
+
+Either two ledgers, or do double transactions in the same entry??
+
+
+
+
+* TODO
+
+** Make binder root account working
+
+This is a bug in =(binder ...)= function call.
+
+
+** Make write to file complete
+
+It now loses
+- virtual
+- notes
+- codes etc.
+
+** Make widget filter correctly
+
+
+
+
+* BUGS ??
+
+The function =(binder *last-binder*)= will return a binder object whose root-account
+does not have any children.
+
+  
