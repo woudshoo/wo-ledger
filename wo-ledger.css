@@ -1,0 +1,26 @@
+wo-amount {
+    margin-left: 20px;
+}
+
+.wo-amount {
+    text-align: right;
+}
+
+.wo-a-list {
+    padding-left: 0px;
+}
+
+.wo-a-line {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+  
+.account-list {
+    background: lightblue;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+    
+

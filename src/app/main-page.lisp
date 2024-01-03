@@ -5,7 +5,9 @@
      :reblocks/html
      :reblocks/session
      :reblocks/actions
-
+     :reblocks/dependencies
+     
+     :wo-ledger/app/session
      :wo-ledger/widgets/entry-list
      :wo-ledger/widgets/account-list)
   (:import-from #:ledger
@@ -31,30 +33,37 @@
 				      (set-selected-account (entry-list mp) se))))
 
 
+(defmethod get-dependencies ((p main-page))
+  (list*
+   (make-dependency #P "wo-ledger.css"
+     :system :wo-ledger
+     :type :css)
+   (call-next-method)))
+
 (defmethod render ((p main-page))
   (with-html
     (:h1 "Ledger")
-    (:p "This is a playground to see if we can use cl-ledger as a YNAB replacement.")
+ 
     (:button :type "button" :onclick (make-js-action
 				      (lambda (&rest r)
 					(update p)))
 	     "Update Widgets")
     (:button :type "button" :onclick (make-js-action
 				      (lambda (&rest r)
-					(binder-refresh-journals-if-needed (get-value :binder))))
+					(binder-refresh-journals-if-needed (session-binder))))
 	     "Refresh Ledger")
-    (:p  (format *stream* "Render Counter: ~D" (incf (render-counter p))))
-    (:p "Lets see if we have a ledger:"))
-  (let ((binder (get-value :binder)))
-
-    (render (entry-list p))
-    (render (account-list p))
-    (with-html
-      (:p (format *stream* "Yes we have a binder, journal read-date: ~{~A~^, ~}~%" (mapcar #'ledger::journal-read-date (ledger:binder-journals binder))))
-      (:p (format *stream* "Yes we have a binder, journal file-dates: ~{~A~^, ~}~%"
-		  (mapcar #'file-write-date
-			  (mapcar #'ledger:journal-source
-				  (ledger:binder-journals binder))))))))
+    (format *stream* " Render Counter: ~D" (incf (render-counter p)))
+    (let ((binder (session-binder)))
+      (format *stream* "Yes we have a binder, journal read-date: ~{~A~^, ~}~%" (mapcar #'ledger::journal-read-date (ledger:binder-journals binder)))
+      (format *stream* "Yes we have a binder, journal file-dates: ~{~A~^, ~}~%"
+	      (mapcar #'file-write-date
+		      (mapcar #'ledger:journal-source
+			      (ledger:binder-journals binder))))))
+  (with-html
+    (:div :style "display:flex"
+	  (render (account-list p))
+	  (:div :style "width:20px")
+	  (render (entry-list p)))))
 
 (defun make-main-page ()
   (make-instance 'main-page))

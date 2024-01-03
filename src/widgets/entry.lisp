@@ -12,19 +12,15 @@
 (in-package :wo-ledger/widgets/entry)
 
 
-
 (defun render-entry-header ()
   (with-html
     (:tr
      (:th "Date")
      (:th "Payee")
-     (:th "Status")
-     (:th "Code")
-     (:th "Entry Note")
      (:th "Account/Fund")
      (:th "Amount")
-     (:th "Virtual")
-     (:th "Tran Note"))))
+     (:th "Target")
+     (:th "Status"))))
 
 (defun render-entry (entry &optional account)
   "Renders the entry to the output stream.
@@ -39,31 +35,12 @@ The optional account does some tricky filtering:
 2. It will not show the transactions for account.
 "
 
-  (let* ((transactions (transactions-relevant-for-account entry account))
-	 (current-transaction (pop transactions)))
-    (when current-transaction
-      
-      (with-html
-	(:tr
-	 (:td  (periods:strftime (entry-actual-date entry)))
-	 (:td  (entry-payee entry))
-	 (:td  (entry-status entry))
-	 (:td  (entry-code entry))
-	 (:td  (entry-note entry))
-	 (:td  (account-fullname (xact-account current-transaction)))
-	 (:td  (cambl:print-value (xact-amount current-transaction)
-				  :output-stream *stream*))
-	 (:td (xact-virtualp current-transaction))
-	 (:td  (xact-note current-transaction)))
-	(loop
-	  :for current-transaction = (pop transactions)
-	  :while current-transaction
-	  :do
-	     (with-html
-	       (:tr
-		(:td) (:td) (:td) (:td) (:td)
-		(:td  (account-fullname (xact-account current-transaction)))
-		(:td  (cambl:print-value (xact-amount current-transaction)
-					 :output-stream *stream*))
-		(:td (xact-virtualp current-transaction))
-		(:td (xact-note current-transaction)))))))))
+  (when (entry-relevant-for-account entry account)
+    (with-html
+      (:tr
+       (:td  (periods:strftime (entry-actual-date entry)))
+       (:td  (entry-payee entry))
+       (:td  (entry-budget-name entry account))
+       (:td  :class "wo-amount" (:wo-amount (entry-value-for-account entry account)))
+       (:td  (entry-expense-name entry))
+       (:td  (entry-status-for-display entry))))))

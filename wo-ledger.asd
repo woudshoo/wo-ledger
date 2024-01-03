@@ -8,3 +8,6 @@
   :pathname "src/"
   :depends-on (#:cl-ledger)
   :class :package-inferred-system)
+
+(asdf:register-system-packages "cl-ledger"  '(:ledger))
+

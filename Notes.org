@@ -93,12 +93,86 @@ this could be done with the =(print-report...)= code to rewrite the file from in
 
 Either two ledgers, or do double transactions in the same entry??
 
+* Ideas for Design
 
+
+** Accounts
+
+Let the account tree look like this:
+
+- Assets::OnBudget::... ::
+  The bank acounts etc that are budgeted.
+- Assets::OffBudget::... ::
+  What YNAB calls tracking accounts
+- Assets::Budget::... ::
+  The envelopes in the budget
+- Assets::Budget::Unassigned ::
+  The default envelope if not manual assigned
+  
+- Liabilities::OnBudget::... ::
+- Liabilities::OffBudget::... ::
+- Liabilities::Budget::Source ::
+  This cancels the budget out to make it zero sum.
+  Any transaction from and to a budget, goes to or from this account.  See below
+
+
+** Budget Mutations
+
+There are two type of budget transactions:
+#+begin_example
+  Liabilities::Budget::Source -->  Assets::Budget::...
+  Assets::Budget::...         -->  Liabilities::Budget::Source
+#+end_example
+
+** Transactions involving budget
+
+They will look like this:
+
+#+begin_example
+2023-05-01  Pay water
+       Expenses::Water              200
+       Assets::OnBudget::ING216    -200
+      [Assets::Budget::Home]       -200
+      [Liabities::Budget::Source]   200
+#+end_example  
+
+This is basically two transactions into 1:
+- transfering the actual money
+- Make money disappear from the budget  
+
+
+
+* Displaying Data
+
+
+** Account View (On Budget)
+
+| Date | Payee/description | Budget Name | Value | ?Expense Name |
+
+
+
+Budget name is the account that is classified as
+- Assets::Budget::...
+Expense namae is
+- Expenses::...
+  
+** Account View (Off Budget)
+
+| Date | Payee/description | Value | ?Expense Name|
+
+* Simplistic idea?
+
+
+Expenses are envelopes.
+
+- negative, means there is money in the envelope
+
+How to offset this?  
 
 
 * TODO
 
-** Make binder root account working
+** DONE Make binder root account working
 
 This is a bug in =(binder ...)= function call.
 
@@ -110,7 +184,32 @@ It now loses
 - notes
 - codes etc.
 
-** Make widget filter correctly
+
+** Make GUI components
+
+*** Checkbox
+
+** Make OnBudget/Bank report work
+
+
+** When reblocks server restarts clicking get errors
+
+Need to some how handle the 'cannot find action' errors
+
+** Sort transactions on date
+
+(at least by default/initially)
+
+** Fix printing of format
+
+- always same decimal places
+- DONE Convert rationals to decimal 
+
+- Add currency symbol???
+
+** Use custom tags
+
+** Line out display of accounts better.
 
 
 

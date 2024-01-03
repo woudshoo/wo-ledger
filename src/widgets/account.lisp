@@ -4,6 +4,8 @@
 	  #:reblocks/html
 	  #:reblocks/widget
 	  #:reblocks/session
+
+	  #:wo-ledger/logic/account
 	  #:ledger)
   (:export
    #:render-account))
@@ -14,6 +16,7 @@
 (defun render-account (account &optional selected)
   (with-html
     (:span :style (format nil "color:~A" (if selected "red" "green"))
-	   (if (account-parent account)
-	       (account-name account)
+	   (account-display-name account)
+#+nil	   (if (account-parent account)
+	       (account-fullname account)
 	       "<ROOT>"))))

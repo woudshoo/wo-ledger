@@ -4,6 +4,7 @@
      :reblocks/app
      :reblocks/page
      :reblocks/session
+     :wo-ledger/logic/app
      :wo-ledger/app/main-page)
   (:import-from :ledger
 		#:binder))
@@ -17,5 +18,5 @@
 
 (defmethod init-page ((app ledger) (url-path string) expire-at)
   (declare (ignore app url-path expire-at))
-  (get-value :binder (binder #P "/Users/wimoudshoorn/Development/Source/Lisp/wo-ledger/test.dat"))
+  (setf (get-value :app) (make-ledger-app))
   (make-main-page))
