@@ -19,7 +19,7 @@
 
 (defun render-budget-account (account indent)
   (with-html
-    (:tr
+    (:tr 
      (:td :style (format nil "padding-left: ~Dpx" (* 20 indent))
       (account-name account))
      (:td :class "wo-amount"
@@ -29,6 +29,9 @@
 (defun render-budget-group (account indent)
   (with-html
     (:tr :class "wo-budget-group"
+	 :onclick (make-js-action
+		   (lambda (&rest r)
+		     (format t "Clicked on Budget group, args: ~S~% " r)))
      (:td :style (format nil "padding-left: ~Dpx" (* 20 indent))
       (account-name account))
      (:td :class "wo-amount"
@@ -45,7 +48,6 @@
     (with-html
       (:h2 "Budget List")
       (:table
-
        (:tbody
 	(recursive-render br-account 0))))))
 

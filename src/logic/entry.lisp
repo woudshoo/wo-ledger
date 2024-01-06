@@ -73,14 +73,22 @@
 
 
 
+
 (defun entry-budget-name (entry account)
   (let ((tr (remove account (transactions-for-account-or-children entry "Assets:Budget") :key #'xact-account)))
     (case (length tr)
       (1 
-       (account-display-name (xact-account (first tr))))
+       (account-display-name tr))
       (0 nil)
-      (t (str:join " -- " (mapcar #'(lambda (tran) (account-display-name (xact-account tran))) tr))))))
+      (t (account-display-name tr)))))
 
+(defun entry-expense-name (entry account)
+  (let ((tr (remove account (transactions-with-filter entry (complement #'xact-virtualp)) :Key #'xact-account)))
+    (case (length tr)
+      (1 
+       (account-display-name tr))
+      (0 nil)
+      (t (account-display-name tr)))))
 
 (defun entry-value-for-account (entry account)
   (let ((tr (transactions-for-account-or-children entry account))
@@ -89,14 +97,6 @@
       (1
 	 (format-value (xact-amount (first tr))))
       (0 "<<No Transaction>>")
-      (t "<<Multiple>>"))))
-
-(defun entry-expense-name (entry)
-  (let ((tr (transactions-for-account-or-children entry "Expenses")))
-    (case (length tr)
-      (1 
-       (account-fullname (xact-account (first tr))))
-      (0 nil)
       (t "<<Multiple>>"))))
 
 
@@ -108,12 +108,7 @@
     (t "-")))
 
 
-;;; --> Need to be a method
-#+nil(defun transactions-relevant-for-account (entry account)
-  "Returns T if we want to see entry in an account overview."
-  (when (notevery #'xact-virtualp  (transactions-for-account-or-children entry account))
-    (let ((transactions (transactions-without-account-or-children entry account))
-	  (virtual? (account-virtual-p account)))
-      (remove-if (lambda (xact) (logical= virtual? (xact-virtualp xact)))
-		     transactions))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 

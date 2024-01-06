@@ -6,6 +6,8 @@
   (:import-from #:cambl
 		#:format-value
 		#:*default-display-precision*)
+  (:import-from #:str
+		#:join)
   (:export
    #:account-display-name
    #:account-display-value
@@ -28,14 +30,20 @@
   "Extend standard method to work on nil as well"
   nil)
 
-(defun account-display-name (account)
-  (let ((acl (account-parents-list account)))
-    (cond
-      ((not acl) "<<NOT EXISTS>>")
-      ((and (> (length acl) 3)) (string= (account-name (nth 1 acl))
-		   "Assets")
-       (str:join " > " (mapcar #'account-name (subseq acl 3))))
-      (t (str:join " > " (mapcar #'account-name (subseq  acl 1)))))))
+(defgeneric account-display-name (acount)
+  (:method  ((account account))
+    (let ((acl (account-parents-list account)))
+      (cond
+	((not acl) "<<NOT EXISTS>>")
+	((and (> (length acl) 3)) (string= (account-name (nth 1 acl))
+					   "Assets")
+	 (str:join " > " (mapcar #'account-name (subseq acl 3))))
+	(t (str:join " > " (mapcar #'account-name (subseq  acl 1)))))))
+  (:method  ((account-list list))
+    (join " -- " (mapcar #'account-display-name account-list)))
+
+  (:method  ((account transaction))
+    (account-display-name (xact-account account))))
 
 
 (defun account-display-value (account)

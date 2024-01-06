@@ -40,5 +40,26 @@ summary {
 #    background: lightblue;
     font-weight: bold;
 }
+xo
 
 
+
+
+wo-uncleared {
+    color: lightgrey;
+}
+
+wo-cleared {
+    color: lightgreen;
+    font-weight: bold;
+}
+
+wo-pendng {
+    color: orange;
+}
+
+wo-unknown-status  {
+    background-color: red;
+}
+
+    

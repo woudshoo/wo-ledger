@@ -60,6 +60,13 @@
 					 (delete-empty-accounts (session-binder))
 					 (update p)))
 	     "Delete Empty Accounts")
+    (:button :type "button"
+	     (format *stream* "<a href=\"api/ledger\" download=\"Budget.leger\">Download Ras</a> "))
+    (:a :href "api/ledger"  "Budget.ledger" "Show")
+;    (:p "Path Info: " (format *stream* "~A" (get-value :request-uri)))
+;    (:p "Routes: " (format *stream* "~A" (slot-value reblocks/routes::*routes*  'routes::template)))
+;    (:p "Env: " (format *stream* "~A" reblocks/session::*env*) )
+;    (:p)
     (format *stream* " Render Counter: ~D" (incf (render-counter p)))
     (let ((binder (session-binder)))
       (format *stream* "Yes we have a binder, journal read-date: ~{~A~^, ~}~%" (mapcar #'ledger::journal-read-date (ledger:binder-journals binder)))

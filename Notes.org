@@ -177,12 +177,16 @@ How to offset this?
 This is a bug in =(binder ...)= function call.
 
 
-** Make write to file complete
+** DONE Make write to file complete
 
 It now loses
 - virtual
 - notes
 - codes etc.
+
+At least it is good enough for now.
+
+*** TODO Should encode notes as Base64 or similar
 
 
 ** Make GUI components
@@ -217,10 +221,9 @@ Hm, sort on name.
 
 ** Fix printing of format
 
-- always same decimal places
+- always same decimal places, this happens when a currency is used.
 - DONE Convert rationals to decimal 
-
-- Add currency symbol???
+- Add currency symbol, this works when the currency is provided by the amount
 
 ** Use custom tags
 
@@ -239,6 +242,9 @@ Need maybe better report in time ranges.  YNAB shows:
   - Outflow for the time period
   - Balance at the end of the time period    
 
+** Download button
+
+*** Should add route dynamically???
 
 
 * BUGS ??
@@ -247,3 +253,11 @@ The function =(binder *last-binder*)= will return a binder object whose root-acc
 does not have any children.
 
   
+
+
+* Design
+
+What level of widget do we want.
+
+E.g. is status of an entry its own widget?
+If so, do we every time dynamically create a widget?

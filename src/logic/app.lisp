@@ -2,6 +2,8 @@
     (:use #:cl
 	  #:alexandria
 	  #:ledger)
+  (:import-from #:wo-ledger/logic/transaction
+		#:xact-serializer)
   (:export
    #:make-ledger-app
    #:ledger
@@ -9,7 +11,8 @@
    #:oba-account
    #:obl-account
    #:tl-account
-   #:br-account))
+   #:br-account
+   #:ledger-content))
 
 (in-package :wo-ledger/logic/app)
 
@@ -35,3 +38,15 @@
   (make-instance 'ledger-app
 		 :ledger
 		 (binder #P "/Users/wimoudshoorn/Development/Source/Lisp/wo-ledger/test.dat")))
+
+
+
+
+
+(defun ledger-content (app)
+  (with-output-to-string (s)
+    (loop
+      :with reporter = (xact-serializer s)
+      :for tr :in (transactions-list (ledger app))
+      :do
+      (funcall reporter tr))))
