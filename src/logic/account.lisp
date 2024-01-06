@@ -9,7 +9,10 @@
   (:export
    #:account-display-name
    #:account-display-value
-   #:account-leafs))
+   #:account-leafs
+   #:do-account-children
+   #:account-leaf-p
+   #:delete-empty-accounts))
 
 (in-package :wo-ledger/logic/account)
 
@@ -61,15 +64,34 @@ spaned of account, but are leafs."
       (traverse-children account)
       result)))
 
-#+nil(defun on-budget-accounts (start-account)
-  (let ((result (list)))
-    (labels ((scan-account (account collect?)
-	       (if (and collect? (account-leaf-p account))
-		   (push account result)
-		   (loop :for ca)
-		 ((string= "OnBudget" (account-name account))))
-	       )))
-    
-    )
 
-  )
+(defmacro do-account-children ((var account) &body body)
+  `(loop :for ,var :in (hash-table-values (or (account-children ,account) (make-hash-table)))
+	 :do
+	 ,@body))
+
+
+(defun number-of-transactions (binder account)
+  (let ((result 0))
+    (loop :with iter = (transactions-iterator
+			binder)
+	  :for tr =  (funcall iter)
+	  :while tr
+	  :when (eq account (xact-account tr))
+	    :do (incf result))
+    result))
+
+(defun account-remove-from-parent (account)
+  (when-let (parent (account-parent account))
+    (remhash (account-name account) (account-children parent))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun delete-empty-accounts (binder &optional (root-account (binder-root-account binder)))
+  (labels ((traverse (account)
+	     (do-account-children (ca account)
+	       (traverse ca))
+	     (when (and (account-leaf-p account)
+			(= 0 (number-of-transactions binder account)))
+	       (account-remove-from-parent account))))
+    (traverse root-account)))

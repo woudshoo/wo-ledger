@@ -8,7 +8,8 @@
    #:ta-account
    #:oba-account
    #:obl-account
-   #:tl-account))
+   #:tl-account
+   #:br-account))
 
 (in-package :wo-ledger/logic/app)
 
@@ -18,7 +19,8 @@
    (on-budget-assets-account :accessor oba-account :initarg :oba-account)
    (off-budget-assest-account :accessor ta-account :initarg :ta-account)
    (on-budget-liabilities-account :accessor obl-account :initarg :obl-account)
-   (off-budget-liabilities-account :accessor tl-account :initarg :tl-account))
+   (off-budget-liabilities-account :accessor tl-account :initarg :tl-account)
+   (budget-root-account :accessor br-account :initarg :br-account))
   (:default-initargs :ledger nil))
 
 (defmethod initialize-instance :after ((la ledger-app) &key &allow-other-keys)
@@ -26,7 +28,8 @@
     (setf (oba-account la) (find-account b "Assets:OnBudget"))
     (setf (ta-account la) (find-account b "Assets:OffBudget"))
     (setf (obl-account la) (find-account b "Liabilities:OnBudget"))
-    (setf (tl-account la) (find-account b "Liabilities:OffBudget"))))
+    (setf (tl-account la) (find-account b "Liabilities:OffBudget"))
+    (setf (br-account la) (find-account b "Assets:Budget"))))
 
 (defun make-ledger-app ()
   (make-instance 'ledger-app

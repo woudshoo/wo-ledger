@@ -6,6 +6,8 @@
      :reblocks/session
      :reblocks/actions
      :reblocks/dependencies
+
+     :wo-ledger/logic/account
      
      :wo-ledger/app/session
      :wo-ledger/widgets/entry-list
@@ -33,6 +35,7 @@
 				      (set-selected-account (entry-list mp) se))))
 
 
+
 (defmethod get-dependencies ((p main-page))
   (list*
    (make-dependency #P "wo-ledger.css"
@@ -52,6 +55,11 @@
 				      (lambda (&rest r)
 					(binder-refresh-journals-if-needed (session-binder))))
 	     "Refresh Ledger")
+    (:button :type "button" :onclick (make-js-action
+				       (lambda (&rest r)
+					 (delete-empty-accounts (session-binder))
+					 (update p)))
+	     "Delete Empty Accounts")
     (format *stream* " Render Counter: ~D" (incf (render-counter p)))
     (let ((binder (session-binder)))
       (format *stream* "Yes we have a binder, journal read-date: ~{~A~^, ~}~%" (mapcar #'ledger::journal-read-date (ledger:binder-journals binder)))
@@ -62,7 +70,6 @@
   (with-html
     (:div :style "display:flex"
 	  (render (account-list p))
-	  (:div :style "width:20px")
 	  (render (entry-list p)))))
 
 (defun make-main-page ()

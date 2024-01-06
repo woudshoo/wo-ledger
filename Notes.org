@@ -188,8 +188,17 @@ It now loses
 ** Make GUI components
 
 *** Checkbox
+*** Button
 
 ** Make OnBudget/Bank report work
+
+Works, but needs clean up.
+- Cleared/Pending status renderer
+- Account/Fund/Target, make display name better
+
+- Color inflow different from outflow, or make differnt columns.
+
+General table layout.
 
 
 ** When reblocks server restarts clicking get errors
@@ -199,6 +208,12 @@ Need to some how handle the 'cannot find action' errors
 ** Sort transactions on date
 
 (at least by default/initially)
+
+** Sort Accounts / Budgets
+
+Hm, sort on name.
+
+(could later add sort key if needed.)
 
 ** Fix printing of format
 
@@ -211,6 +226,18 @@ Need to some how handle the 'cannot find action' errors
 
 ** Line out display of accounts better.
 
+
+** Use time ranges (select a month???)
+
+Need maybe better report in time ranges.  YNAB shows:
+
+- Accounts ::
+  Can't check right now.
+
+- Budget ::
+  - Inflow for the time perios
+  - Outflow for the time period
+  - Balance at the end of the time period    
 
 
 

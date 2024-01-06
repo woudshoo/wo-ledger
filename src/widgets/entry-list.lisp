@@ -6,8 +6,11 @@
 	  #:reblocks/session
 
 	  #:wo-ledger/app/session
-	  #:wo-ledger/widgets/entry
 
+	  #:wo-ledger/widgets/account-entry-list
+	  #:wo-ledger/widgets/budget-list
+	  
+	  #:wo-ledger/logic/app
 	  #:wo-ledger/logic/account
 	  #:ledger)
   (:export
@@ -31,21 +34,8 @@
   (setf (selected-account el) ac)
   (update el))
 
-(defun selected-account-name (entry-list)
-  (account-display-name (selected-account entry-list)))
-
-(defun selected-account-value (entry-list)
-  (account-display-value (selected-account entry-list)))
-
 (defmethod render ((el entry-list))
-  (with-html
-    (:h2 "Entries for " (selected-account-name el)  " [" (selected-account-value el) "]")
-    (:table
-     (:thead
-      (render-entry-header))
-     (:tbody
-      (loop :with iter = (entries-iterator (session-binder))
-	    :for entry = (funcall iter)
-	    :while entry
-	    :do
-	    (render-entry entry (selected-account el)))))))
+  (let ((app (get-value :app)))
+    (if (eq (selected-account el) (br-account app))
+	(render-budget-list (selected-account el))
+	(render-account-entry-list (selected-account el)))))

@@ -3,19 +3,19 @@ Y 2023
 05/01 * Initial account
     Assets:OnBudget:Bank:Checking              1000.0
     Equity:Opening Balances                   -1000.0
-    [Assets:Budget:Unassigned]                 1000.0
+    [Assets:Budget:Special:Unassigned]                 1000.0
     [Liabilities:Budget:Source]               -1000.0
 
 
 05/01 * Initial account
     Liabilities:OnBudget:CreditCard            -233.0
     Equity:Opening Balances                     233.0
-    [Assets:Budget:Unassigned]                 -233.0
+    [Assets:Budget:Special:Unassigned]                 -233.0
     [Liabilities:Budget:Source]                 233.0
 
 05/01 * Initial account
-    Liabilities:OffBudget:Mortgage            -1000.0
-    Equity:Opening Balances                    1000.0
+    Liabilities:OffBudget:Mortgage            -10000.0
+    Equity:Opening Balances                    10000.0
 
 
 05/01 *  Initial account
@@ -29,16 +29,16 @@ Y 2023
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 05/02 * Budget
-    [Assets:Budget:Variable:Groceries]              500.0
-    [Assets:Budget:Unassigned]
+    [Assets:Budget:Normal:Variable:Groceries]              500.0
+    [Assets:Budget:Special:Unassigned]
 
 05/03 * Budget
-    [Assets:Budget:Fixed:Mortgate]                   300.0
-    [Assets:Budget:Unassigned]
+    [Assets:Budget:Normal:Fixed:Mortgage]                   1000.0
+    [Assets:Budget:Special:Unassigned]
 
 05/04 * Budget
-    [Assets:Budget:Fixed:VvE]                        200.0
-    [Assets:Budget:Unassigned]
+    [Assets:Budget:Normal:Fixed:VvE]                        350.0
+    [Assets:Budget:Special:Unassigned]
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -46,11 +46,14 @@ Y 2023
 05/08 Salery
      Assets:OnBudget:Bank:Checking               888.0
      Income:IntelliMagic                     -888.0
-     [Assets:Budget:Unassigned]               888.0     
+     [Assets:Budget:Special:Unassigned]               888.0     
      [Liabilities:Budget:Source]               -888.0
 
 
-
+05/08 Budget
+    [Assets:Budget:Normal:Fixed:Mortgage]                   850.0
+    [Assets:Budget:Special:Unassigned]
+     
 ;;; the following should be shown as??
 ;;;
 ;;;    For Checking:
@@ -59,38 +62,45 @@ Y 2023
      ; comment
      Expenses:Verzekering                     250.0 ; comment 2
      Assets:OnBudget:Bank:Checking                    -250.0
-     [Assets:Budget:Fixed:VvE]                       -250.0
+     [Assets:Budget:Normal:Fixed:VvE]                       -250.0
      [Liabilities:Budget:Source]                        250.0
      
 
 05/08 Jumbo
-      Expense:Food                                  23.87
+      Expenses:Food                                  23.87
       Assets:OnBudget:Bank:Checking                -23.87
-      [Assets:Budget:Variable:Groceries]           -23.87
+      [Assets:Budget:Normal:Variable:Groceries]           -23.87
       [Liabilities:Budget:Source]                   23.87
 
 05/09 Albert Heijn
-      Expense:Food                                  12.23
+      Expenses:Food                                  12.23
       Assets:OnBudget:Bank:Checking                -12.23
-      [Assets:Budget:Variable:Groceries]           -12.23
+      [Assets:Budget:Normal:Variable:Groceries]           -12.23
       [Liabilities:Budget:Source]                   12.23
 
 ;      
 05/28 Hypotheek
       Liabilities:OffBudget:Mortgage                825.0
       Assets:OnBudget:Bank:Checking                -825.0
-      [Assets:Budget:Fixed:Mortgage]               -825.0
+      [Assets:Budget:Normal:Fixed:Mortgage]               -825.0
       [Liabilities:Budget:Source]                    825.0
       
 
+05/28 Extra Inleg Pensioen
+      Assets:OffBudget:Pension                     400.0
+      Assets:OnBudget:Bank:Checking               -400.0
+      [Assets:Budget:Special:Unassigned]          -400.0
+      [Liabilities:Budget:Source]                  400.0
+      
+      
 05/08 Salery
      Assets:OnBudget:Bank:Checking               2137.33
      Income:IntelliMagic                     -2137.33
-     [Assets:Budget:Unassigned]               2137.33
+     [Assets:Budget:Special:Unassigned]               2137.33
      [Liabilities:Budget:Source]               -2137.33
 
 06/28 Hypotheek
       Liabilities:OffBudget:Mortgage                825.0
       Assets:OnBudget:Bank:Checking                -825.0
-      [Assets:Budget:Fixed:Mortgage]               -825.0
+      [Assets:Budget:Normal:Fixed:Mortgage]               -825.0
       [Liabilities:Budget:Source]                   825.0
