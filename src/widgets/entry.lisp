@@ -11,23 +11,41 @@
 
 (in-package :wo-ledger/widgets/entry)
 
+(defwidget entry-row ()
+  ((entry :accessor entry :initarg :entry)
+   (account :accessor account :initarg :account)))
 
 (defun render-entry-header ()
   (with-html
-    (:tr
-     (:th "Date")
-     (:th "Payee")
-     (:th "Account/Fund")
-     (:th "Amount")
-     (:th "Target")
-     (:th "Status"))))
+    (:al-table-header
+     (:al-cell "Date")
+     (:al-cell "Payee")
+     (:al-cell "Account/Fund")
+     (:al-cell :class "wo-amount" "Amount")
+     (:al-cell "Target")
+     (:al-cell :class "wo-status" "Status"))))
 
 
-(defun render-entry-status (entry)
+(defmethod get-html-tag ((er entry-row))
+  :al-table-row)
+
+(defmethod render ((er entry-row))
+  (let ((entry (entry er))
+	(account (account er)))
+    (with-html
+      (:al-cell  (periods:strftime (entry-actual-date entry)))
+      (:al-cell  (entry-payee entry))
+      (:al-cell  (entry-budget-name entry account))
+      (:al-cell  :class "wo-amount" (:wo-amount (entry-value-for-account entry account)))
+      (:al-cell  (entry-expense-name entry account))
+      (:al-cell  :class "wo-status" (render-entry-status er)))))
+
+(defun render-entry-status (er)
   (let ((action (make-js-action
 		 (lambda (&rest r)
-		   (setf (entry-status entry) :cleared)))))
-    (case (entry-status entry)
+		   (setf (entry-status (entry er)) :cleared)
+		   (update er)))))
+    (case (entry-status (entry er))
       (:uncleared  (with-html (:wo-uncleared :onclick action "🆄")))
       (:cleared (with-html (:wo-cleared "🅒")))
       (:pending (with-html (:wo-pending :onclick action "🅟")))
@@ -50,13 +68,4 @@ What it will show:
 - Funds column:   The virtual entry that is NOT a special entry
 - Target:         The non-virtual entry that is not equal to account
 "
-
-  (when (entry-relevant-for-account entry account)
-    (with-html
-      (:tr
-       (:td  (periods:strftime (entry-actual-date entry)))
-       (:td  (entry-payee entry))
-       (:td  (entry-budget-name entry account))
-       (:td  :class "wo-amount" (:wo-amount (entry-value-for-account entry account)))
-       (:td  (entry-expense-name entry account))
-       (:td  (render-entry-status entry))))))
+  (render (make-instance 'entry-row :entry entry :account account)))

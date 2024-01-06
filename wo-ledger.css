@@ -6,15 +6,21 @@ wo-amount {
     text-align: right;
 }
 
+.wo-status {
+    text-align: center;
+    cursor: default;
+}
+
+	       
 .wo-a-list {
     padding-left: 0px;
 }
+
 
 .wo-a-line {
     display: flex;
     justify-content: space-between;
 }
-
 
   
 .account-list {
@@ -37,10 +43,10 @@ summary {
 
 
 .wo-budget-group {
-#    background: lightblue;
+/*        background: lightblue; */
     font-weight: bold;
 }
-xo
+
 
 
 
@@ -54,12 +60,42 @@ wo-cleared {
     font-weight: bold;
 }
 
-wo-pendng {
+wo-pending {
     color: orange;
 }
 
+wo-uncleared:hover {
+    color: lightgreen;
+}
+
+wo-pending:hover {
+    color: lightgreen;
+}
+
 wo-unknown-status  {
-    background-color: red;
+    color: lightgreen;
 }
 
     
+
+
+al-table {
+    display: table;
+}
+
+al-table-header {
+    display: table-row;
+}
+
+al-table-row {
+    display: table-row;
+}
+
+al-cell {
+    display: table-cell;
+    padding: 5px;
+}
+
+al-table-header al-cell {
+    font-weight: bold;
+}

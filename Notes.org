@@ -229,6 +229,7 @@ Hm, sort on name.
 
 ** Line out display of accounts better.
 
+** Make scrollbars better
 
 ** Use time ranges (select a month???)
 

@@ -1,8 +1,13 @@
 Y 2023
 
 
+; account testing
+
+
+
+
 05/01 * Initial account
-Assets:OnBudget:Bank:Checking               € 1000.0
+    Assets:OnBudget:Bank:Checking               € 1000.0
     Equity:Opening Balances                 €  -1000.0
     [Assets:Budget:Special:Unassigned]      €           1000.0
     [Liabilities:Budget:Source]             €  -1000.0
@@ -44,7 +49,7 @@ Assets:OnBudget:Bank:Checking               € 1000.0
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-05/08 Salery
+05/08 ! Salery
      Assets:OnBudget:Bank:Checking             €  888.0
      Income:IntelliMagic                       € -888.0
      [Assets:Budget:Special:Unassigned]        €  888.0     
@@ -93,7 +98,8 @@ Assets:OnBudget:Bank:Checking               € 1000.0
       [Assets:Budget:Special:Unassigned]         € -400.0
       [Liabilities:Budget:Source]                €  400.0
       
-      
+
+
 05/08 Salery
      Assets:OnBudget:Bank:Checking           €    2137.33
      Income:IntelliMagic                     €   -2137.33
