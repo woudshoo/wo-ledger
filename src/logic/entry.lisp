@@ -2,11 +2,15 @@
     (:use #:cl
 	  #:alexandria
 	  #:ledger
+	  #:reblocks/session  ;; to get global app
 	  #:series)
   (:import-from #:wo-ledger/logic/transaction
 		#:xact-part-of-account)
   (:import-from #:wo-ledger/logic/account
-		#:account-display-name)
+		#:account-display-name
+		#:account-leafs)
+  (:import-from #:wo-ledger/logic/app
+		#:br-account)
   (:import-from #:cambl
 		#:*default-display-precision*
 		#:format-value)
@@ -21,7 +25,8 @@
    #:entry-budget-name
    #:entry-value-for-account
    #:entry-expense-name
-   #:entry-status-for-display))
+   #:entry-status-for-display
+   #:possible-budget-names))
 
 (in-package :wo-ledger/logic/entry)
 
@@ -107,6 +112,18 @@
     (:cleared "C")
     (t "-")))
 
+
+
+(defun possible-budget-names (entry account)
+  "Returns a list of budget names that can be choosen for ENTRY given we are displaying ACCOUNT.
+
+The return is list of (fullname display-name  selected) where selected is a generalized boolean"
+  (let* ((app (get-value :app))
+	 (ra  (br-account app))
+	 (default-name (entry-budget-name entry account)))
+    (loop :for a :in (account-leafs ra)
+	  :for a-n = (account-display-name a)
+	  :collect (list (account-fullname a) a-n (string= a-n default-name)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

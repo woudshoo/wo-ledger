@@ -14,7 +14,8 @@
    #:account-leafs
    #:do-account-children
    #:account-leaf-p
-   #:delete-empty-accounts))
+   #:delete-empty-accounts
+   #:number-of-transactions))
 
 (in-package :wo-ledger/logic/account)
 

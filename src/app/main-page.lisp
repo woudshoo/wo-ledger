@@ -68,6 +68,8 @@
 ;    (:p "Env: " (format *stream* "~A" reblocks/session::*env*) )
 ;    (:p)
     (format *stream* " Render Counter: ~D" (incf (render-counter p)))
+    (:p)
+    (:input :type "date" )
     (let ((binder (session-binder)))
       (format *stream* "Yes we have a binder, journal read-date: ~{~A~^, ~}~%" (mapcar #'ledger::journal-read-date (ledger:binder-journals binder)))
       (format *stream* "Yes we have a binder, journal file-dates: ~{~A~^, ~}~%"

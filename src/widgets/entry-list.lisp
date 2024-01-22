@@ -4,7 +4,7 @@
 	  #:reblocks/html
 	  #:reblocks/widget
 	  #:reblocks/session
-
+	  #:reblocks-ui/form
 	  #:wo-ledger/app/session
 
 	  #:wo-ledger/widgets/account-entry-list
