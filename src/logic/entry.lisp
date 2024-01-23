@@ -11,9 +11,13 @@
 		#:account-leafs)
   (:import-from #:wo-ledger/logic/app
 		#:br-account)
+  (:import-from #:local-time
+		#:parse-timestring)
   (:import-from #:cambl
 		#:*default-display-precision*
 		#:format-value)
+  (:import-from #:wo-ledger/logic/app
+		#:ledger)
   (:export
    #:transactions-for-account
    #:transactions-with-filter
@@ -26,7 +30,8 @@
    #:entry-value-for-account
    #:entry-expense-name
    #:entry-status-for-display
-   #:possible-budget-names))
+   #:possible-budget-names
+   #:update-entry))
 
 (in-package :wo-ledger/logic/entry)
 
@@ -78,9 +83,11 @@
 
 
 
+(defun transaction-for-account (entry account)
+  (remove account (transactions-for-account-or-children entry "Assets:Budget") :key #'xact-account))
 
 (defun entry-budget-name (entry account)
-  (let ((tr (remove account (transactions-for-account-or-children entry "Assets:Budget") :key #'xact-account)))
+  (let ((tr (transaction-for-account entry account)))
     (case (length tr)
       (1 
        (account-display-name tr))
@@ -121,11 +128,23 @@ The return is list of (fullname display-name  selected) where selected is a gene
   (let* ((app (get-value :app))
 	 (ra  (br-account app))
 	 (default-name (entry-budget-name entry account)))
-    (loop :for a :in (account-leafs ra)
-	  :for a-n = (account-display-name a)
-	  :collect (list (account-fullname a) a-n (string= a-n default-name)))))
+    (when default-name
+      (loop :for a :in (account-leafs ra)
+	    :for a-n = (account-display-name a)
+	    :collect (list (account-fullname a) a-n (string= a-n default-name))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+(defun update-entry (entry account date-string payee-string account-string amount-string expense-string)
+  "Update the entry displayed for account with the ...-string values."
+  (setf (entry-actual-date entry) (parse-timestring date-string))
+  (setf (entry-payee entry) payee-string)
+  (let ((tr (first (transaction-for-account entry account)))
+	(app (get-value :app)))
+    (format t "typeof tr: ~S~%" (type-of tr))
+    (format t "trans: ~S~%" tr)
+    (format t "  Entries: ~S~%" (ledger:entry-transactions entry))
+    (when tr 
+      (setf (xact-account tr) (find-account (ledger app) account-string)))))

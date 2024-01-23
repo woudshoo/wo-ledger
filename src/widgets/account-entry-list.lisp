@@ -1,4 +1,10 @@
 (uiop:define-package :wo-ledger/widgets/account-entry-list
+    (:documentation "This renders a list of transactions for an account.
+
+So it deals with real transactions.   It will uses the entry widget to render
+the rows of the transaction table.
+
+It also manages the editing and creating new transactions.")
     (:use #:cl
 	  #:alexandria
 	  #:reblocks/html
@@ -48,12 +54,13 @@
       (:account-sub-header (number-of-transactions (session-binder) account)))
 
     
-    (with-html-form (:post (lambda (&key date payee account amount expense &allow-other-keys)
+    (with-html-form (:post (lambda (&key date payee account amount expense submit &allow-other-keys)
 			     (let ((entry (entry (entry-row-in-edit ael))))
+			       (update-entry entry (account ael) date payee account amount expense)
 #+nil			       (setf (xact-amount entry) (cambl:amount amount))
 			       (setf (entry-payee entry) payee))
 			     (clear-row-in-edit ael)
-			     (format t "--~A--~A-----~%" date payee)))
+			     (format t "-S:-~A-~A--~A-----~%" submit date payee)))
       (:al-table
        (render-entry-header)
        (loop :with iter = (entries-iterator (session-binder))

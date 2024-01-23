@@ -9,7 +9,7 @@ Y 2023
 05/01 * Initial account
     Assets:OnBudget:Bank:Checking               € 1000.0
     Equity:Opening Balances                 €  -1000.0
-    [Assets:Budget:Special:Unassigned]      €           1000.0
+    [Assets:Budget:Special:Unassigned]          1000.0
     [Liabilities:Budget:Source]             €  -1000.0
 
 

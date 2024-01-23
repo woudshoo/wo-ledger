@@ -40,9 +40,6 @@
    :al-table-row))
 
 
-(defmethod toggle-edit-action ((er t))
-  (make-js-action (lambda (&rest r)
-		    (toggle-edit er))))
 
 (defmethod cancel-edit-action ((er entry-row))
   (make-js-action (lambda (&rest r)
@@ -68,14 +65,20 @@
     (with-html
       (:al-cell (:input :type "date" :name "date" :value (periods:strftime (entry-actual-date entry) :format "%Y-%m-%d")))
       (:al-cell (:input :type "text" :name "payee" :value (entry-payee entry)))
-      (:al-cell (:select :name "account"
-		  (loop :for (fn an select) :in (possible-budget-names entry account)
-			:do
-			   (with-html
-			     (:option :value fn :selected select an)))))
+      (:al-cell (alexandria:if-let (b-names (possible-budget-names entry account))
+		  (with-html
+		    (:select :name "account"
+		      (loop :for (fn an select) :in b-names
+			    :do
+			       (with-html
+				 (:option :value fn :selected select an)))))
+		  (with-html
+		    "<-->")))
       (:al-cell (:input :class "wo-amount" :type "text" :name "amount" :value (entry-value-for-account entry account)))
       (:al-cell (:input :type "text" :name "expense" :value (entry-expense-name entry account)))
-      (:al-cell (:input :type "submit" :name "ok" :value "Ok") (:button :type "button" :onclick (toggle-edit-action er) "Cancel")))))
+      (:al-cell (:input :type "submit" :name "submit" :value "Ok")
+		(:input :type "submit" :name "submit" :value "Ok-Next" "Yea!")
+		(:input :type "submit" :name "submit" :value "Cancel")))))
 
 (defmethod render ((er entry-row))
   (if (in-edit er)
