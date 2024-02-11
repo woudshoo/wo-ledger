@@ -1,12 +1,12 @@
 (uiop:define-package :wo-ledger/widgets/account
     (:use #:cl
-	  #:alexandria
+#+nil	  #:alexandria
 	  #:reblocks/html
-	  #:reblocks/widget
-	  #:reblocks/session
+#+nil	  #:reblocks/widget
+#+nil	  #:reblocks/session
 
 	  #:wo-ledger/logic/account
-	  #:ledger)
+#+nil	  #:ledger)
   (:export
    #:render-account))
 
@@ -16,7 +16,4 @@
 (defun render-account (account &optional selected)
   (with-html
     (:span :style (format nil "color:~A" (if selected "red" "green"))
-	   (account-display-name account)
-#+nil	   (if (account-parent account)
-	       (account-fullname account)
-	       "<ROOT>"))))
+	   (account-display-name account))))

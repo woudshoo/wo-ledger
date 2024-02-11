@@ -1,4 +1,7 @@
 (uiop:define-package :wo-ledger/logic/account
+    (:documentation "Accounts are things money lives.
+
+For wo-ledger we consider a few different accounts:")
     (:use #:cl
 	  #:alexandria
 	  #:ledger

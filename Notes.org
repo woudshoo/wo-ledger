@@ -248,6 +248,52 @@ Need maybe better report in time ranges.  YNAB shows:
 *** Should add route dynamically???
 
 
+* GUI
+
+#+begin_src plantuml :file widgets.svg
+  
+class main_page  
+
+class account_list {
+   selected_account : account
+   selected_account_dependend : account
+   hide_zero : boolean
+   show_full_tree : boolean
+}
+
+class entry_list {
+   selected_account
+}
+
+abstract budget_list
+
+class account_entry_list {
+   account : account
+   entry_row_in_edit : entry
+}
+
+class entry_row {
+   entry : entry
+   account : account
+   in_edit : boolean
+   on_eddit : function
+}
+
+
+main_page -> account_list
+entry_list <- main_page
+
+entry_list --> budget_list
+entry_list --> account_entry_list
+
+
+account_entry_list --> entry_row
+#+end_src
+
+#+RESULTS:
+[[file:widgets.svg]]
+
+
 * BUGS ??
 
 The function =(binder *last-binder*)= will return a binder object whose root-account

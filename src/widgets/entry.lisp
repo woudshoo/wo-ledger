@@ -7,6 +7,7 @@
 ;	  #:reblocks-ui/form
 	  #:wo-ledger/logic/entry
 	  #:ledger)
+  (:documentation "Code responsible for rendering an entry in a table as row.")
   (:export
    #:render-entry-header
    #:entry-row
@@ -25,6 +26,7 @@
 
 
 (defun render-entry-header ()
+  "Renders the heaer for a table containing entries."
   (with-html
     (:al-table-header
      (:al-cell "Date")
@@ -47,6 +49,7 @@
 		    (update er))))
 
 (defun render-row-default (er)
+  "Render the row in its default state, that is in non edit mode."
   (let ((entry (entry er))
 	(account (account er)))
     (with-html
@@ -60,6 +63,7 @@
       (:al-cell  :class "wo-status" (render-entry-status er)))))
 
 (defun render-row-editable (er)
+  "Render the row in edit mode."
   (let ((entry (entry er))
 	(account (account er)))
     (with-html
@@ -81,11 +85,14 @@
 		(:input :type "submit" :name "submit" :value "Cancel")))))
 
 (defmethod render ((er entry-row))
+  "Render the row.
+The edit state determines how it is rendered."
   (if (in-edit er)
       (render-row-editable er)
       (render-row-default er)))
 
 (defun render-entry-status (er)
+  "Renders the status (cleared/pending etc) as a toggleable entry."
   (let ((set-cleared (make-js-action
 		 (lambda (&rest r)
 		   (setf (entry-status (entry er)) :cleared)
@@ -96,21 +103,3 @@
       (:pending    (with-html (:wo-pending        :onclick set-cleared "🅟")))
       (t           (with-html (:wo-unknown-status :onclick set-cleared "U"))))))
 
-#+nilo(defun render-entry (entry account)
-  "Renders the entry to the output stream.
-
-Could be part of the render pipeline of an entry widger,
-or used raw.
-
-
-The optional account does some tricky filtering:
-
-1. It will show the entry if at least one of the transactions involve account.
-2. It will not show the transactions for account.
-
-What it will show:
-
-- Funds column:   The virtual entry that is NOT a special entry
-- Target:         The non-virtual entry that is not equal to account
-"
-  (render (make-instance 'entry-row :entry entry :account account)))

@@ -18,6 +18,8 @@ It also manages the editing and creating new transactions.")
 	  #:wo-ledger/logic/entry
 	  #:wo-ledger/logic/account
 	  #:ledger)
+  (:import-from #:str
+		#:string-case)
   (:export
    #:render-account-entry-list
    #:account-entry-list))
@@ -55,10 +57,13 @@ It also manages the editing and creating new transactions.")
 
     
     (with-html-form (:post (lambda (&key date payee account amount expense submit &allow-other-keys)
-			     (let ((entry (entry (entry-row-in-edit ael))))
-			       (update-entry entry (account ael) date payee account amount expense)
-#+nil			       (setf (xact-amount entry) (cambl:amount amount))
-			       (setf (entry-payee entry) payee))
+			     (string-case submit
+			       ("Ok"
+				;; these need to match witht the display strings in entry.lisp
+				(let ((entry (entry (entry-row-in-edit ael))))
+				  (update-entry entry (account ael) date payee account amount expense)
+				  #+nil			       (setf (xact-amount entry) (cambl:amount amount))
+				  (setf (entry-payee entry) payee))))
 			     (clear-row-in-edit ael)
 			     (format t "-S:-~A-~A--~A-----~%" submit date payee)))
       (:al-table

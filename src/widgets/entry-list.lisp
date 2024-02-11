@@ -13,6 +13,9 @@
 	  #:wo-ledger/logic/app
 	  #:wo-ledger/logic/account
 	  #:ledger)
+  (:documentation "Renders a list of entries for an account.
+There are two types of account supported, a physical account,
+or a virtual (budget) account.")
   (:export
    #:entry-list
    #:set-selected-account))
